@@ -1,0 +1,59 @@
+package com.api.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.WebAttributes;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.api.model.loginBean;
+
+@CrossOrigin
+@RestController
+public class LoginController {
+
+//	 @Resource(name="authenticationManager")
+	@Autowired
+	 private AuthenticationManager authManager;
+
+
+	 @RequestMapping(value = "/login", method = RequestMethod.POST)
+	    public String login(loginBean user,HttpServletRequest request) {
+		 
+	        UsernamePasswordAuthenticationToken authReq =
+	            new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+	        System.out.println("in controller"+user.getUsername()+" "+user.getPassword());
+	        Authentication auth = authManager.authenticate(authReq);
+	        SecurityContext sc = SecurityContextHolder.getContext();
+	        sc.setAuthentication(auth);
+	        HttpSession session = request.getSession(true);
+	        System.out.println(auth.isAuthenticated());
+//	        if(!auth.isAuthenticated()) {
+//	        	session.invalidate();
+//	        	System.out.println("invalidate");
+//	        }else
+	        session.setAttribute("SPRING_SECURITY_CONTEXT", sc);
+	        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+	        
+	        return "success";
+	    }
+	 
+	 @RequestMapping(value = "/admin", method = RequestMethod.GET)
+	    public String admin() {
+	    return "adminlogIn";
+	    }
+	 @RequestMapping(value = "/user", method = RequestMethod.GET)
+	    public String user() {
+	    return "userlogIn";
+	    }
+}

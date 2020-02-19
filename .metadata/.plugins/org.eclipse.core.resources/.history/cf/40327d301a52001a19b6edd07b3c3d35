@@ -1,0 +1,32 @@
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@CrossOrigin
+@RestController
+@SpringBootApplication
+public class DemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(DemoApplication.class, args);
+	}
+
+	@GetMapping("login")
+	public  String test() {
+		UsernamePasswordAuthenticationToken authReq
+		 = new UsernamePasswordAuthenticationToken("uname", "pass");
+		Authentication auth = authManager.authenticate(authReq);
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth);
+		return "susscess";
+	}
+}

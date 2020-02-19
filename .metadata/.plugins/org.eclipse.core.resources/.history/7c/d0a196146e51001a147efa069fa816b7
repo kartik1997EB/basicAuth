@@ -1,0 +1,11 @@
+package com.api.model;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name="roles")
+public class Role {
+
+	private long id;
+	private String name;
+}
